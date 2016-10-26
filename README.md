@@ -1,2 +1,2 @@
 # props
-Reads property files
+Reads property files.
