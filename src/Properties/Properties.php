@@ -4,7 +4,7 @@ namespace Properties;
 class Properties {
 	private static $instances = [];
 
-	public static function read($filename, $key) {
+	public static function read($filename, $key = "default") {
 		$properties = array();
 		if (file_exists($filename)) {
 			$properties = parse_ini_file(/* DOCUMENT_ROOT."/". */$filename, true);
@@ -27,7 +27,14 @@ class Properties {
 		return null;
 	}
 
-	private static function getDefaultInstance() {
+	public static function getInstance($key) {
+		if (!array_key_exists($key, self::$instances)) {
+			return null; // or throw exception ?
+		}
+		return self::$instances[$key];
+	}
+
+	public static function getDefaultInstance() {
 		if (!array_key_exists("default", self::$instances)) {
 			$propertyFile = new PropertyFile("default", null, []);
 			self::$instances["default"] = $propertyFile;
@@ -112,6 +119,16 @@ class PropertyFile {
 		$this->key = $key;
 		$this->filename = $filename;
 		$this->properties = $properties;
+
+		// define uppercased prop keys
+		foreach ($this->properties as $key => $val) {
+			if (is_array($val)) {
+				continue;
+			}
+			if (strtoupper($key) == $key) {
+				define($key, $val);
+			}
+		}
 	}
 
 	public function getProperty($key) {
