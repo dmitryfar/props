@@ -45,7 +45,7 @@ class Properties {
 	public static function get($property = null) {
 		$args = func_get_args();
 		if (count($args) >= 1){
-			$s = call_user_func_array(array(self, "getProperty"), $args);
+			$s = call_user_func_array(array(__CLASS__, "getProperty"), $args);
 		} else {
 			$s = array();
 			foreach (self::$instances as $key => $instance) {
