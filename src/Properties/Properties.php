@@ -168,7 +168,7 @@ class PropertyFile {
 	public function getSection($section, $property = null) {
 		$array = self::getProperty($section);
 
-		if ($property) {
+		if ($property && $array) {
 			$s = (array_key_exists($property, $array)) ? $array[$property] : null;
 			if ($s == null) {
 				return null;
